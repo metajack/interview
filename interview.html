@@ -1,14 +1,51 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <title>$title</title>
+    <title>Interview $name - $title</title>
+
+    <style>
+      <!--
+	  #leftside {
+	    margin-right: 250px;
+	  }
+
+	  #rightside { 
+	    float: right;
+	    width: 200px;
+	  }
+      //-->
+    </style>
   </head>
   <body>
-    <h1>Interview $name</h1>
-    <p>Can't get an interview with $name?  We've got you covered.</p>
+    <div id='leftside'>
+      <h1>Interview $name</h1>
+      <p>Can't get an interview with $name?  We've got you covered.</p>
+      
+      <h2><strong>Q:</strong> $question</h2>
+      <p>$answer</p>
 
-    <h2><strong>Q:</strong> $question</h2>
-    <p>$answer</p>
+      <p>Use <a href='$permalink'>$permalink</a> to share this answer.</a></p>
+    </div>
+
+    <div id='rightside'>
+      <script type="text/javascript">
+	<!--
+	    google_ad_client = "pub-2199596689978867";
+	    /* interview sidebar */
+	    google_ad_slot = "3322916008";
+	    google_ad_width = 160;
+	    google_ad_height = 600;
+	// -->
+      </script>
+      <script type="text/javascript"
+	      src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+      </script>
+    </div>
+
+    
+    <div id='footer'>
+      <a href='/about'>about this site</a>
+    </div>
 
     <script type="text/javascript">
       var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");

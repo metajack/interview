@@ -45,7 +45,6 @@ def appendWordToMap(word_map, previous, word):
 
 
 def setup(filename):
-    random.seed(time.time())
     words = getWords(getLines(filename))
     word_maps = ({}, {}, {})
 
@@ -134,16 +133,29 @@ class Interview(resource.Resource):
 	self.reload()
 
     def getChild(self, name, request):
-	if name == '':
+	if name == '' or name.isdigit():
 	    return self
 
 	return resource.Resource.getChild(self, name, request)
 
     def render_GET(self, request):
+	url_seed = str(request.URLPath()).split('/')
+	if len(url_seed) > 0:
+	    url_seed = url_seed[-1]
+	
+	if url_seed.isdigit():
+	    seed = int(url_seed)
+	else:
+	    seed = int(time.time() * 1000)
+	
+	random.seed(seed)
 	self.template.question = self.config[0]['question']
 	self.template.answer = make_talk(self.words,
 					 self.word_maps,
 					 self.config[0]['state'][0])
+	self.template.permalink = 'http://interview%s.com/%d' % \
+	    (self.persona, seed)
+	
 	return str(self.template)
 
     def reload(self):
