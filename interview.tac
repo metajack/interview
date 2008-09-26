@@ -39,24 +39,28 @@ palin = Interview('palin')
 palin.putChild('about', about)
 root.default.putChild('palin', palin)
 root.addHost('interviewpalin.com', palin)
+root.addHost('www.interviewpalin.com', palin)
 
 # mccain
 mccain = Interview('mccain')
 mccain.putChild('about', about)
 root.default.putChild('mccain', mccain)
 root.addHost('interviewmccain.com', mccain)
+root.addHost('www.interviewmccain.com', mccain)
 
 # biden
 biden = Interview('biden')
 biden.putChild('about', about)
 root.default.putChild('biden', biden)
 root.addHost('interviewbiden.com', biden)
+root.addHost('www.interviewbiden.com', biden)
 
 # obama
 obama = Interview('obama')
 obama.putChild('about', about)
 root.default.putChild('obama', obama)
-root.addHost('interviewobama.cmo', obama)
+root.addHost('interviewobama.com', obama)
+root.addHost('www.interviewobama.com', obama)
 
 site = server.Site(root)
 
