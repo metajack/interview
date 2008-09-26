@@ -8,7 +8,7 @@
 
 import signal
 
-from twisted.web import server, resource, vhost
+from twisted.web import server, resource, vhost, static
 from twisted.application import service, internet
 
 from interview import Interview
@@ -30,23 +30,31 @@ class DefaultRoot(resource.Resource):
 # default
 root.default = DefaultRoot()
 
+# about page
+about = static.File('about.html')
+root.default.putChild('about', about)
+
 # palin
 palin = Interview('palin')
+palin.putChild('about', about)
 root.default.putChild('palin', palin)
 root.addHost('interviewpalin.com', palin)
 
 # mccain
 mccain = Interview('mccain')
+mccain.putChild('about', about)
 root.default.putChild('mccain', mccain)
 root.addHost('interviewmccain.com', mccain)
 
 # biden
 biden = Interview('biden')
+biden.putChild('about', about)
 root.default.putChild('biden', biden)
 root.addHost('interviewbiden.com', biden)
 
 # obama
 obama = Interview('obama')
+obama.putChild('about', about)
 root.default.putChild('obama', obama)
 root.addHost('interviewobama.cmo', obama)
 

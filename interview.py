@@ -124,7 +124,7 @@ NAMES = {
 }
 
 class Interview(resource.Resource):
-    isLeaf = True
+    isLeaf = False
 
     def __init__(self, persona):
 	resource.Resource.__init__(self)
@@ -132,6 +132,12 @@ class Interview(resource.Resource):
 	self.persona = persona
 
 	self.reload()
+
+    def getChild(self, name, request):
+	if name == '':
+	    return self
+
+	return resource.Resource.getChild(self, name, request)
 
     def render_GET(self, request):
 	self.template.question = self.config[0]['question']
