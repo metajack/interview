@@ -3,6 +3,8 @@ import time
 
 from twisted.web import resource
 
+from Cheetah.Template import Template
+
 def getLines(filename):
     return [line[0:-1] for line in open(filename).readlines()]
 
@@ -10,7 +12,7 @@ def getWords(lines):
     words = []
     for line in lines:
 	words.extend(line.split())
-    words = [w.lower() for w in words]
+    #words = [w.lower() for w in words]
     return words
 
 def createProbabilityHash(words):
@@ -98,37 +100,45 @@ def getNextWord(words, word_maps, order, previous):
     return words[random.randint(0, len(words) - 1)]
     
 
-def make_talk(words, word_maps, num_words=100, order=2):
+def make_talk(words, word_maps, state=None, num_words=100, order=2):
     # the starting state
-    if order == 3:
-	previous = (words[0], words[1], words[2])
-    elif order == 2:
-	previous = (None, words[0], words[1])
-    else:
-	previous = (None, None, words[0])
-
-    previous = (None, None, words[random.randint(0, len(words)-1)])
+    previous = state or (None, None, words[random.randint(0, len(words)-1)])
 
     text = [previous[-1]]
 
-    for i in range(num_words):
+    i = 0
+    while i < num_words or (i >= num_words and text[-1][-1] != '.'):
 	word = getNextWord(words, word_maps, order, previous)
 	text.append(word)
+	i += 1
 	previous = (previous[1], previous[2], word)
+	
 
     return ' '.join(text)
 
-class PalinTalk(resource.Resource):
+
+class Interview(resource.Resource):
     isLeaf = True
 
-    def __init__(self, words, word_maps):
+    def __init__(self, words, word_maps, config):
 	resource.Resource.__init__(self)
 
 	self.words = words
 	self.word_maps = word_maps
+	self.config = config
+
+	self.template = Template(file='interview.html')
+	self.template.title = 'InterviewPalin.com'
+	self.template.name = 'Sarah Palin'
+
 
     def render_GET(self, request):
-	return "<html><head><title>Interview Palin</title></head><body>%s</body></html>" % make_talk(self.words, self.word_maps)
+	self.template.question = self.config[0]['question']
+	self.template.answer = make_talk(self.words,
+					 self.word_maps,
+					 self.config[0]['state'])
+	return str(self.template)
+
 
 if __name__ == '__main__':
     words, word_maps = setup()
