@@ -61,7 +61,7 @@ root.addHost('interviewobama.cmo', obama)
 site = server.Site(root)
 
 application = service.Application("interview")
-internet.TCPServer(8000, site).setServiceParent(application)
+internet.TCPServer(80, site).setServiceParent(application)
 
 
 # setup signals
