@@ -149,10 +149,16 @@ class Interview(resource.Resource):
 	    seed = int(time.time() * 1000)
 	
 	random.seed(seed)
-	self.template.question = self.config[0]['question']
+
+	num_q = len(self.config)
+	q = random.randint(0, num_q - 1)
+	num_states = len(self.config[q])
+	state = random.randint(0, num_states - 1)
+
+	self.template.question = self.config[q]['question']
 	self.template.answer = make_talk(self.words,
 					 self.word_maps,
-					 self.config[0]['state'][0])
+					 self.config[q]['state'][state])
 	self.template.permalink = 'http://interview%s.com/%d' % \
 	    (self.persona, seed)
 	
