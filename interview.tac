@@ -17,7 +17,7 @@ words, word_map = interview.setup()
 root = vhost.NameVirtualHost()
 
 class DefaultRoot(resource.Resource):
-    isLeaf = True
+    isLeaf = False
 
     def getChild(self, name, request):
 	if name == '':
