@@ -9,10 +9,7 @@
 from twisted.web import server, resource, vhost
 from twisted.application import service, internet
 
-import interview
-import config
-
-words, word_map = interview.setup()
+from interview import Interview
 
 root = vhost.NameVirtualHost()
 
@@ -32,22 +29,22 @@ class DefaultRoot(resource.Resource):
 root.default = DefaultRoot()
 
 # palin
-palin = interview.Interview(words, word_map, config.palin)
+palin = Interview('palin')
 root.default.putChild('palin', palin)
 root.addHost('interviewpalin.com', palin)
 
 # mccain
-mccain = interview.Interview(words, word_map, None)
+mccain = Interview('mccain')
 root.default.putChild('mccain', mccain)
 root.addHost('interviewmccain.com', mccain)
 
 # biden
-biden = interview.Interview(words, word_map, None)
+biden = Interview('biden')
 root.default.putChild('biden', biden)
 root.addHost('interviewbiden.com', biden)
 
 # obama
-obama = interview.Interview(words, word_map, None)
+obama = Interview('obama')
 root.default.putChild('obama', obama)
 root.addHost('interviewobama.cmo', obama)
 

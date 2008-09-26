@@ -44,9 +44,9 @@ def appendWordToMap(word_map, previous, word):
 	word_map[previous] = [word]
 
 
-def setup():
+def setup(filename):
     random.seed(time.time())
-    words = getWords(getLines("palin.txt"))
+    words = getWords(getLines(filename))
     word_maps = ({}, {}, {})
 
     pos = 0
@@ -116,27 +116,33 @@ def make_talk(words, word_maps, state=None, num_words=100, order=2):
 
     return ' '.join(text)
 
+NAMES = {
+    'palin': {'short': 'Palin', 'long': 'Sarah Palin'},
+    'mccain': {'short': 'McCain', 'long': 'John McCain'},
+    'biden': {'short': 'Biden', 'long': 'Joe Biden'},
+    'obama': {'short': 'Obama', 'long': 'Barak Obama'}
+}
 
 class Interview(resource.Resource):
     isLeaf = True
 
-    def __init__(self, words, word_maps, config):
+    def __init__(self, persona):
 	resource.Resource.__init__(self)
 
-	self.words = words
-	self.word_maps = word_maps
-	self.config = config
+	self.words, self.word_maps = setup(persona + '.txt')
+	self.config = eval(open(persona + '.config').read())
 
 	self.template = Template(file='interview.html')
-	self.template.title = 'InterviewPalin.com'
-	self.template.name = 'Sarah Palin'
+	
+	self.template.title = 'Interview%s.com' % NAMES[persona]['short']
+	self.template.name = NAMES[persona]['long']
 
 
     def render_GET(self, request):
 	self.template.question = self.config[0]['question']
 	self.template.answer = make_talk(self.words,
 					 self.word_maps,
-					 self.config[0]['state'])
+					 self.config[0]['state'][0])
 	return str(self.template)
 
 
