@@ -168,8 +168,6 @@ class Interview(resource.Resource):
 		q = int(last[3:])
 	    if last[:3] == 'qn-' and last[3:].isdigit():
 		q = -int(last[3:])
-	
-	random.seed(seed)
 
 	num_q = len(self.config)
 	if q is None:
@@ -183,6 +181,8 @@ class Interview(resource.Resource):
 
 	num_states = len(self.config[q]['state'])
 	state = random.randint(0, num_states - 1)
+
+	random.seed(seed)
 
 	self.template.question = self.config[q]['question']
 	self.template.answer = make_talk(self.words,
