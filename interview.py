@@ -103,7 +103,12 @@ def make_talk(words, word_maps, state=None, num_words=100, order=2):
     # the starting state
     previous = state or (None, None, words[random.randint(0, len(words)-1)])
 
-    text = [previous[-1]]
+    if previous[0]:
+	text = list(previous[:])
+    elif previous[1]:
+	text = list(previous[1:])
+    else:
+	text = [previous[2]]
 
     i = 0
     while i < num_words or (i >= num_words and text[-1][-1] != '.'):
@@ -133,34 +138,59 @@ class Interview(resource.Resource):
 	self.reload()
 
     def getChild(self, name, request):
-	if name == '' or name.isdigit():
+	if name == '' or name.startswith('qr-') or \
+		name.startswith('qn-') or name.isdigit():
 	    return self
 
 	return resource.Resource.getChild(self, name, request)
 
     def render_GET(self, request):
-	url_seed = str(request.URLPath()).split('/')
-	if len(url_seed) > 0:
-	    url_seed = url_seed[-1]
-	
-	if url_seed.isdigit():
+	prefix = None
+	last = str(request.URLPath()).split('/')
+	if len(last) > 0:
+	    prefix = '/'.join(last[:-1])
+	    last = last[-1]
+	else:
+	    prefix = 'http://interview%s.com' % self.persona
+	    last = ''
+
+	if last.isdigit():
 	    seed = int(url_seed)
 	else:
 	    seed = int(time.time() * 1000)
+	    if not (last.startswith('qr-') or last.startswith('qn-')):
+		prefix += '/' + last
+
+	q = None
+	if len(last) > 3:
+	    if last[:3] == 'qr-' and last[3:].isdigit():
+		q = int(last[3:])
+	    if last[:3] == 'qn-' and last[3:].isdigit():
+		q = -int(last[3:])
 	
 	random.seed(seed)
 
 	num_q = len(self.config)
-	q = random.randint(0, num_q - 1)
-	num_states = len(self.config[q])
+	if q is None:
+	    q = random.randint(0, num_q - 1)
+	elif q < 0:
+	    new_q = random.randint(0, num_q - 1)
+	    if new_q == -q:
+		q = (new_q + 1) % num_q
+	    else:
+		q = new_q
+
+	num_states = len(self.config[q]['state'])
 	state = random.randint(0, num_states - 1)
 
 	self.template.question = self.config[q]['question']
 	self.template.answer = make_talk(self.words,
 					 self.word_maps,
 					 self.config[q]['state'][state])
-	self.template.permalink = 'http://interview%s.com/%d' % \
-	    (self.persona, seed)
+	self.template.permalink = '%s/%d' % \
+	    (prefix, seed)
+	self.template.question_id = q
+	self.template.prefix = prefix
 	
 	return str(self.template)
 
