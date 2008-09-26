@@ -6,6 +6,8 @@
 # Name vhosts are used to get to the different sites, and they are
 # also available under /palin, /mccain, /obama, and /biden.
 
+import signal
+
 from twisted.web import server, resource, vhost
 from twisted.application import service, internet
 
@@ -52,3 +54,14 @@ site = server.Site(root)
 
 application = service.Application("interview")
 internet.TCPServer(8000, site).setServiceParent(application)
+
+
+# setup signals
+
+def onHup(*args):
+    for persona in [palin, mccain, biden, obama]:
+	persona.reload()
+
+signal.signal(signal.SIGHUP, onHup)
+    
+    

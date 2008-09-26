@@ -129,14 +129,9 @@ class Interview(resource.Resource):
     def __init__(self, persona):
 	resource.Resource.__init__(self)
 
-	self.words, self.word_maps = setup(persona + '.txt')
-	self.config = eval(open(persona + '.config').read())
+	self.persona = persona
 
-	self.template = Template(file='interview.html')
-	
-	self.template.title = 'Interview%s.com' % NAMES[persona]['short']
-	self.template.name = NAMES[persona]['long']
-
+	self.reload()
 
     def render_GET(self, request):
 	self.template.question = self.config[0]['question']
@@ -144,6 +139,16 @@ class Interview(resource.Resource):
 					 self.word_maps,
 					 self.config[0]['state'][0])
 	return str(self.template)
+
+    def reload(self):
+	self.words, self.word_maps = setup(self.persona + '.txt')
+	self.config = eval(open(self.persona + '.config').read())
+
+	self.template = Template(file='interview.html')
+	
+	self.template.title = 'Interview%s.com' % NAMES[self.persona]['short']
+	self.template.name = NAMES[self.persona]['long']
+	
 
 
 if __name__ == '__main__':
