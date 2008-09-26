@@ -155,10 +155,11 @@ class Interview(resource.Resource):
 	    last = ''
 
 	if last.isdigit():
-	    seed = int(url_seed)
+	    seed = int(last)
 	else:
 	    seed = int(time.time() * 1000)
-	    if not (last.startswith('qr-') or last.startswith('qn-')):
+	    if not (last == '' or \
+			last.startswith('qr-') or last.startswith('qn-')):
 		prefix += '/' + last
 
 	q = None
