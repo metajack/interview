@@ -33,6 +33,24 @@
 	  #rightside {
 	  }
 
+          a.button {
+	    margin-top: 25px;
+	    padding: 10px;
+	    text-align: center;
+	    width: 250px;
+	    background-color: #ccc;
+	    border: solid 2px #999;
+	    color: black;
+	  }
+
+          #repeatq {
+	    float: left;
+	  }
+
+          #newq {
+	    float: right;
+          }
+
           #footer {
 	    color: #fff;
             background-color: #666;
@@ -69,15 +87,15 @@
 	  Use <a href='$permalink'>$permalink</a> to share this answer.
 	</p>
 	
-	<p>
-	  I'm lost in a blizzard of words.
-	  <a href='$prefix/r$question_id'>Repeat the question!</a>
-	</p>
+	<a id='repeatq' class='button' href='$prefix/r$question_id'>
+	  I'm lost in a blizzard of words.<br />
+	  <strong>Repeat the question!</strong>
+	</a>
 	
-	<p>
-	  I give up.
-	  <a href='$prefix/n$question_id'>Ask a new question?</a>
-	</p>
+	<a id='newq' class='button' href='$prefix/n$question_id'>
+	  I give up.<br />
+	  <strong>Ask a new question!</strong>
+	</a>
 	
       </div>
       
