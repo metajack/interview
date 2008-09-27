@@ -3,7 +3,7 @@
   <head>
     <title>Interview $name - $title</title>
 
-    <style>
+    <style type='text/css'>
       <!--
 	  #leftside {
 	    margin-right: 250px;
@@ -24,16 +24,16 @@
       <h2><strong>Q:</strong> $question</h2>
       <p>$answer</p>
 
-      <p>Use <a href='$permalink'>$permalink</a> to share this answer.</a></p>
+      <p>Use <a href='$permalink'>$permalink</a> to share this answer.</p>
 
       <p>
 	I'm lost in a blizzard of words.
-	<a href='$prefix/qr-$question_id'>Repeat the question!</a>
+	<a href='$prefix/r$question_id'>Repeat the question!</a>
       </p>
 
       <p>
 	I give up.
-	<a href='$prefix/qn-$question_id'>Ask a new question?</a>
+	<a href='$prefix/n$question_id'>Ask a new question?</a>
       </p>
 
     </div>

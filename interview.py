@@ -1,5 +1,9 @@
+import re
 import random
 import time
+
+from glob import glob
+from base64 import b64encode, b64decode
 
 from twisted.web import resource
 
@@ -130,6 +134,9 @@ NAMES = {
 class Interview(resource.Resource):
     isLeaf = False
 
+    perm_re = re.compile('^c(\d+)q(\d+)s(\d+)-(.+)$')
+    action_re = re.compile('^([rn])(\d+)$')
+
     def __init__(self, persona):
 	resource.Resource.__init__(self)
 
@@ -138,8 +145,9 @@ class Interview(resource.Resource):
 	self.reload()
 
     def getChild(self, name, request):
-	if name == '' or name.startswith('qr-') or \
-		name.startswith('qn-') or name.isdigit():
+	perm_match = self.perm_re.match(name)
+	action_match = self.action_re.match(name)
+	if name == '' or perm_match or action_match:
 	    return self
 
 	return resource.Resource.getChild(self, name, request)
@@ -154,49 +162,77 @@ class Interview(resource.Resource):
 	    prefix = 'http://interview%s.com' % self.persona
 	    last = ''
 
-	if last.isdigit():
-	    seed = int(last)
-	else:
+	# decode permalink or action from last
+	corpus = None
+	question = None
+	state = None
+	seed = None
+
+	perm_match = self.perm_re.match(last)
+	action_match = self.action_re.match(last)
+	if perm_match:
+	    corpus = int(perm_match.group(1))
+	    question = int(perm_match.group(2))
+	    state = int(perm_match.group(3))
+	    seed = int(perm_match.group(4), 16)
+	elif action_match:
+	    action = action_match.group(1)
+	    if action == 'r':
+		question = int(action_match.group(2))
+	    elif action == 'n':
+		question = -int(action_match.group(2))
+	elif last != '':
+	    prefix += '/' + last
+	    
+	if seed is None:
 	    seed = int(time.time() * 1000)
-	    if not (last == '' or \
-			last.startswith('qr-') or last.startswith('qn-')):
-		prefix += '/' + last
-
-	q = None
-	if len(last) > 3:
-	    if last[:3] == 'qr-' and last[3:].isdigit():
-		q = int(last[3:])
-	    if last[:3] == 'qn-' and last[3:].isdigit():
-		q = -int(last[3:])
-
-	num_q = len(self.config)
-	if q is None:
-	    q = random.randint(0, num_q - 1)
-	elif q < 0:
-	    new_q = random.randint(0, num_q - 1)
-	    if new_q == -q:
-		q = (new_q + 1) % num_q
-	    else:
-		q = new_q
-
-	num_states = len(self.config[q]['state'])
-	state = random.randint(0, num_states - 1)
-
 	random.seed(seed)
 
-	self.template.question = self.config[q]['question']
-	self.template.answer = make_talk(self.words,
-					 self.word_maps,
-					 self.config[q]['state'][state])
-	self.template.permalink = '%s/%d' % \
-	    (prefix, seed)
-	self.template.question_id = q
+	# pregenerate random numbers
+	q_rand = random.random()
+	s_rand = random.random()
+
+	# choose corpus
+	if corpus is None:
+	    corpus = len(self.corpus) - 1
+	words = self.corpus[corpus]['words']
+	word_maps = self.corpus[corpus]['word_maps']
+
+	# choose question
+	num_q = len(self.config)
+	if question is None:
+	    question = int(round(q_rand * (num_q - 1)))
+	elif question < 0:
+	    new_q = int(round(q_rand * (num_q - 1)))
+	    if new_q == -question:
+		question = (new_q + 1) % num_q
+	    else:
+		question = new_q
+
+	# choose starting state
+	num_states = len(self.config[question]['state'])
+	state = int(round(s_rand * (num_states - 1)))
+
+	# fill out the template
+	self.template.question = self.config[question]['question']
+	self.template.answer = make_talk(words,
+					 word_maps,
+					 self.config[question]['state'][state])
+	self.template.permalink = '%s/c%dq%ds%d-%x' % \
+	    (prefix, corpus, question, state, seed)
+	self.template.question_id = question
 	self.template.prefix = prefix
 	
 	return str(self.template)
 
     def reload(self):
-	self.words, self.word_maps = setup(self.persona + '.txt')
+	self.corpus = []
+	texts = sorted(glob("%s-*.txt" % self.persona))
+	for t in texts:
+	    w, wm = setup(t)
+	    self.corpus.append({'words': w, 'word_maps': wm})
+	
+
 	self.config = eval(open(self.persona + '.config').read())
 
 	self.template = Template(file='interview.html')
