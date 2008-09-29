@@ -1,0 +1,26 @@
+This is the code for the Web sites interviewpalin.com,
+interviewmccain.com, interviewbiden.com, and interviewobama.com.
+
+Inspired by the incomprehensible rambling of Sarah Palin during her
+Katie Couric interview, I decided to built a Markov chain based Palin
+interview generator.  The result is surprising accurate, and, I think,
+hilarious.
+
+This code is based on code written by Siddhi (and others) which was
+published at
+http://siddhi.blogspot.com/2007/07/generating-sentences-using-markov.html
+
+I made the code slightly more general as well as turned it into a Web
+application via Twisted Python's twisted.web library.
+
+Please direct questions and comments to:
+
+       Jack Moffitt <metajack@gmail.com>
+
+My co-conspirators in this endeavor were:
+
+* Kim Hagen - researched Palin's corpus and helped fine tune intial
+      	      states
+
+* Christopher Zorn - set up EC2 instance and offered his Twisted Python
+  	      	     wisdom

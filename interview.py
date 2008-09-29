@@ -1,9 +1,32 @@
+# interview.py
+#
+# Copyright (c) 2008 Jack Moffitt <metajack@gmail.com>
+#     and Siddhi <http://siddhi.blogspot.com/2007/07/generating-sentences-using-markov.html>
+#
+# Main markov chain generator code and twisted.web Resource class.
+#
+# This code was derived from code originally published by Siddhi.
+#
+# This file is part of interview.
+#
+# Interview is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Interview is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+
 import re
 import random
 import time
 
 from glob import glob
-from base64 import b64encode, b64decode
 
 from twisted.web import resource
 
