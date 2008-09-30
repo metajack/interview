@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Interview $name - $title</title>
+
+    <style type='text/css'>
+      <!--
+	  body {
+	    font-family: Helvetica, Arial, Sans-serif;
+          }
+
+          a, a:visited {
+	    color: #22f;
+	    text-decoration: none;
+          }
+
+          a:hover {
+	    text-decoration: underline;
+	  }
+
+          #content {
+	    width: 850px;
+	    margin: 0 auto;
+	    text-align: left;
+          }
+
+	  #leftside {
+	    float: left;
+	    width: 600px;
+	    margin-right: 25px;
+	  }
+
+	  #rightside {
+	  }
+
+          a.button {
+	    margin-top: 25px;
+	    padding: 10px;
+	    text-align: center;
+	    width: 250px;
+	    background-color: #ccc;
+	    border: solid 2px #999;
+	    color: black;
+	  }
+
+          #repeatq {
+	    float: left;
+	  }
+
+          #newq {
+	    float: right;
+          }
+
+          #footer {
+	    color: #fff;
+            background-color: #666;
+            padding: 10px;
+	    width: 850px;
+	    margin: 0 auto;
+          }
+
+          #footer a,
+	  #footer a:visited {
+	    color: #aaf;
+	  }
+
+
+          p.permalink { font-size: 75%; text-align: right; }
+
+          div.clear { clear: both; }
+      //-->
+    </style>
+  </head>
+  <body>
+    <center>
+    <div id='content'>
+      <div id='leftside'>
+	<h1>Interview $name</h1>
+	<p>Can't get an interview with $name?  We've got you covered.</p>
+	
+	<hr />
+
+	<h2><strong>Q:</strong> $question</h2>
+	<p>$answer</p>
+	
+	<p class="permalink">
+	  Use <a href='$permalink'>$permalink</a> to share this answer.
+	</p>
+	
+	<a id='repeatq' class='button' href='$prefix/r$question_id'>
+	  I'm lost in a blizzard of words.<br />
+	  <strong>Repeat the question!</strong>
+	</a>
+	
+	<a id='newq' class='button' href='$prefix/n$question_id'>
+	  I give up.<br />
+	  <strong>Ask a new question!</strong>
+	</a>
+	
+      </div>
+      
+      <div id='rightside'>
+	<script type="text/javascript">
+	  <!--
+	      google_ad_client = "pub-2199596689978867";
+	      /* interview sidebar */
+	      google_ad_slot = "3322916008";
+	      google_ad_width = 160;
+	      google_ad_height = 600;
+	      // -->
+	</script>
+	<script type="text/javascript"
+		src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+	</script>
+      </div>
+    
+      <div class='clear'></div>
+    </div>
+    </center>
+
+    <div id='footer'>
+      <a href='/about'>about this site</a>
+    </div>
+
+    <script type="text/javascript">
+      var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+      document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+      var pageTracker = _gat._getTracker("UA-5755401-1");
+      pageTracker._trackPageview();
+    </script>
+  </body>
+</html>
