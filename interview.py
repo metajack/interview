@@ -190,7 +190,7 @@ class Interview(resource.Resource):
 	question = None
 	state = None
 	seed = None
-	repeatq = False
+	repeatq = True
 
 	perm_match = self.perm_re.match(last)
 	action_match = self.action_re.match(last)
@@ -260,7 +260,7 @@ class Interview(resource.Resource):
 
 	self.config = eval(open(self.persona + '.config').read())
 
-	self.template = Template(file='interview.html')
+	self.template = Template(file='%s.html' % self.persona)
 	
 	self.template.title = 'Interview%s.com' % NAMES[self.persona]['short']
 	self.template.name = NAMES[self.persona]['long']

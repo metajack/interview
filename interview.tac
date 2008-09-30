@@ -54,6 +54,7 @@ root.default.putChild('about', about)
 # palin
 palin = Interview('palin')
 palin.putChild('about', about)
+palin.putChild('images', static.File('palin-images'))
 root.default.putChild('palin', palin)
 root.addHost('interviewpalin.com', palin)
 root.addHost('www.interviewpalin.com', palin)
