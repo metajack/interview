@@ -190,6 +190,7 @@ class Interview(resource.Resource):
 	question = None
 	state = None
 	seed = None
+	repeatq = False
 
 	perm_match = self.perm_re.match(last)
 	action_match = self.action_re.match(last)
@@ -200,10 +201,11 @@ class Interview(resource.Resource):
 	    seed = int(perm_match.group(4), 16)
 	elif action_match:
 	    action = action_match.group(1)
+	    question = int(action_match.group(2))
 	    if action == 'r':
-		question = int(action_match.group(2))
+		repeatq = True
 	    elif action == 'n':
-		question = -int(action_match.group(2))
+		repeatq = False
 	elif last != '':
 	    prefix += '/' + last
 	    
@@ -225,9 +227,9 @@ class Interview(resource.Resource):
 	num_q = len(self.config)
 	if question is None:
 	    question = int(round(q_rand * (num_q - 1)))
-	elif question < 0:
+	elif question >= 0 and not repeatq:
 	    new_q = int(round(q_rand * (num_q - 1)))
-	    if new_q == -question:
+	    if new_q == question:
 		question = (new_q + 1) % num_q
 	    else:
 		question = new_q
