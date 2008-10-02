@@ -23,6 +23,7 @@
 # along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
+import sys
 import random
 import time
 
@@ -268,6 +269,26 @@ class Interview(resource.Resource):
 
 
 if __name__ == '__main__':
-    words, word_maps = setup()
+    if len(sys.argv) < 2 or len(sys.argv) > 5:
+	print "usage: %s PERSONA [START1 [START2 [START3]]]" % sys.argv[0]
+	sys.exit(1)
 
-    print make_talk(words, word_maps)
+    persona = sys.argv[1]
+
+    order = 2
+    if persona[-1] in ('1', '2', '3'):
+	order = int(persona[-1])
+	persona = persona[:-1]
+
+    text = sorted(glob("%s-*.txt" % persona))[-1]
+    w, wm = setup(text)
+
+    start = sys.argv[2:]
+    if len(start) == 1:
+	start = (None, None, start[0])
+    elif len(start) == 2:
+	start = (None, start[0], start[1])
+    else:
+	start = tuple(start)
+
+    print make_talk(w, wm, start, order=order)
