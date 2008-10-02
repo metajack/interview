@@ -1,3 +1,4 @@
 twistd.pid
 deploy.sh
 test.tac
+twistd.log
