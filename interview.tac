@@ -69,6 +69,7 @@ root.addHost('www.interviewmccain.com', mccain)
 # biden
 biden = Interview('biden')
 biden.putChild('about', about)
+biden.putChild('images', static.File('biden-images'))
 root.default.putChild('biden', biden)
 root.addHost('interviewbiden.com', biden)
 root.addHost('www.interviewbiden.com', biden)
